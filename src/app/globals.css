@@ -313,33 +313,67 @@
   backdrop-filter: blur(24px) saturate(1.2);
 }
 
-.glass-form {
+.glass-form,
+.glass-menu,
+.lang-trigger {
   background: linear-gradient(
     160deg,
     rgba(226, 238, 246, 0.18),
     rgba(10, 16, 22, 0.1)
   );
-  border: 1px solid rgba(255, 255, 255, 0.25);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.24),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.05),
     0 30px 80px -40px rgba(0, 0, 0, 0.8);
   -webkit-backdrop-filter: blur(10px) saturate(1.1);
   backdrop-filter: blur(10px) saturate(1.1);
 }
 
-.glass-menu {
-  background: linear-gradient(
-    160deg,
-    rgba(226, 238, 246, 0.18),
-    rgba(10, 16, 22, 0.1)
-  );
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.24),
-    0 30px 80px -40px rgba(0, 0, 0, 0.8);
-  -webkit-backdrop-filter: blur(10px) saturate(1.1);
-  backdrop-filter: blur(10px) saturate(1.1);
+.glass-form,
+.glass-menu,
+.lang-trigger {
+  position: relative;
+}
+
+/* Minimal desktop-only glow on glass surfaces and text. */
+
+.glass-form::before,
+.glass-menu::before,
+.lang-trigger::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: rgba(255, 255, 255, 0.045);
+  opacity: 0;
+  transition: opacity 300ms ease;
+  pointer-events: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .glass-form:hover::before,
+  .glass-menu:hover::before,
+  .lang-trigger:hover::before {
+    opacity: 1;
+  }
+
+  .login-scope h1,
+  .login-scope h2,
+  .login-scope p,
+  .login-scope label,
+  .login-scope a {
+    transition:
+      color 260ms ease,
+      text-shadow 260ms ease;
+  }
+
+  .login-scope h1:hover,
+  .login-scope h2:hover,
+  .login-scope p:hover,
+  .login-scope label:hover,
+  .login-scope a:hover {
+    color: rgba(255, 255, 255, 0.94);
+    text-shadow: 0 0 16px rgba(255, 255, 255, 0.24);
+  }
 }
 
 /* Intro curtain: blurred site background + rotating status words */

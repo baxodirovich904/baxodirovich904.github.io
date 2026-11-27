@@ -64,8 +64,8 @@ export function LanguageSwitcher({
         aria-haspopup="listbox"
         aria-expanded={open}
         className={cn(
-          "group flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] text-slate-300 transition",
-          "hover:border-white/20 hover:bg-white/[0.07] hover:text-white",
+          "lang-trigger group flex items-center gap-2 rounded-xl text-slate-300 transition",
+          "hover:text-white",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400/50",
           compact ? "h-10 px-3 text-xs font-semibold" : "h-11 px-3.5 text-sm",
         )}
@@ -88,7 +88,7 @@ export function LanguageSwitcher({
             "absolute z-50 mt-2 w-52 origin-top overflow-hidden rounded-2xl p-1.5 animate-scale-in",
             glass
               ? "glass-menu"
-              : "border border-white/10 bg-night-800/95 shadow-[0_24px_60px_-20px_rgba(0,0,0,0.9)] backdrop-blur-xl",
+              : "bg-night-800/95 shadow-[0_24px_60px_-20px_rgba(0,0,0,0.9)] backdrop-blur-xl",
             align === "right" ? "right-0" : "left-0",
           )}
         >
@@ -113,10 +113,10 @@ export function LanguageSwitcher({
               >
                 <span
                   className={cn(
-                    "grid size-7 place-items-center rounded-lg border text-[10px] font-bold",
+                    "grid size-7 place-items-center rounded-lg text-[10px] font-bold",
                     isActive
-                      ? "border-brand-400/30 bg-brand-500/15 text-brand-300"
-                      : "border-white/10 bg-white/5 text-slate-500",
+                      ? "bg-brand-500/15 text-brand-300"
+                      : "bg-white/5 text-slate-500",
                   )}
                 >
                   {item.label}

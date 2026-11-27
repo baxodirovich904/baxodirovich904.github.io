@@ -72,10 +72,7 @@ export function LoginForm() {
 
   return (
     <div className="relative w-full max-w-[440px]">
-      <div className="pointer-events-none absolute -inset-px rounded-[29px] bg-gradient-to-b from-white/25 via-white/[0.05] to-brand-500/15 opacity-80" />
-
       <div className="glass-form relative overflow-hidden rounded-[24px] p-4 sm:rounded-[28px] sm:p-6 lg:p-8">
-        <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-white/70 to-transparent" />
         <div className="pointer-events-none absolute -right-16 -top-20 size-48 rounded-full bg-brand-500/15 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-24 -left-16 size-48 rounded-full bg-accent-500/10 blur-3xl" />
 
