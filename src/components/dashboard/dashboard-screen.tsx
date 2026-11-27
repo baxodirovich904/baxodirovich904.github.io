@@ -4,6 +4,8 @@ import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Sidebar } from "@/components/dashboard/sidebar";
 import { MainPanel } from "@/components/dashboard/main-panel";
+import { IntroCurtain } from "@/components/intro-curtain";
+import { LoadingLabel } from "@/components/loading-label";
 import { MobileDock } from "@/components/dashboard/mobile-dock";
 import { MobileMainPanel } from "@/components/dashboard/mobile-main-panel";
 import {
@@ -17,7 +19,8 @@ export function DashboardScreen() {
   const [session, setSession] = useState<Session | null>(null);
   const [collapsed, setCollapsed] = useState(false);
   const [section, setSection] = useState("Bosh sahifa");
-  const [dockHeight, setDockHeight] = useState(68);
+  const [dockHeight, setDockHeight] = useState(60);
+  const [intro, setIntro] = useState(false);
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
@@ -34,12 +37,35 @@ export function DashboardScreen() {
     return () => window.cancelAnimationFrame(frame);
   }, [router]);
 
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => {
+      try {
+        if (window.sessionStorage.getItem("bm-intro") === "1") {
+          window.sessionStorage.removeItem("bm-intro");
+          setIntro(true);
+        }
+      } catch {
+        // Storage can be unavailable.
+      }
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
+
   const handleDockHeight = useCallback((height: number) => {
     setDockHeight(height);
   }, []);
 
   if (!session) {
-    return null;
+    return (
+      <div className="fixed inset-0 grid place-items-center">
+        <div className="login-fon absolute inset-0" />
+        <div className="absolute inset-0 bg-black/25" />
+        <div className="relative">
+          <LoadingLabel />
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -48,6 +74,8 @@ export function DashboardScreen() {
         <div className="login-fon absolute inset-0" />
         <div className="absolute inset-0 bg-black/25" />
       </div>
+
+      {intro && <IntroCurtain durationMs={2400} />}
 
       <Sidebar
         open

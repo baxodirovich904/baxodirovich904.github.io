@@ -138,7 +138,7 @@ export function Sidebar({
                       onClose();
                     }}
                     className={cn(
-                      "relative flex items-center gap-3 text-xs font-medium transition-colors",
+                      "relative flex items-center gap-3 text-xs font-medium transition-colors duration-300 ease-out",
                       collapsed
                         ? cn(
                             "size-11 justify-center rounded-full px-0",

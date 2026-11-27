@@ -71,7 +71,11 @@ export function MobileDock({
       ref={dockRef}
       className={cn(
         "fixed inset-x-3 bottom-3 z-50 overflow-hidden rounded-[28px] bg-white/[0.09] shadow-[0_40px_120px_-40px_rgba(0,0,0,0.95)] backdrop-blur-2xl transition-[max-height] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] lg:hidden",
-        expanded ? "max-h-[520px]" : "max-h-[68px]",
+        expanded
+          ? profileOpen
+            ? "max-h-[280px]"
+            : "max-h-[320px]"
+          : "max-h-[60px]",
       )}
     >
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/[0.07] via-transparent to-black/25" />
@@ -99,7 +103,7 @@ export function MobileDock({
                       setOpenGroup(null);
                     }}
                     className={cn(
-                      "flex h-10 w-full items-center gap-3 rounded-2xl px-3 text-xs font-medium transition-colors",
+                      "flex h-10 w-full items-center gap-3 rounded-2xl px-3 text-xs font-medium transition-colors duration-300 ease-out",
                       isActive
                         ? "bg-white/[0.12] text-white"
                         : "text-white/75 hover:text-white",
@@ -120,7 +124,7 @@ export function MobileDock({
         </div>
       )}
 
-      <div className="relative flex h-[68px] items-center gap-1 px-2">
+      <div className="relative flex h-[60px] items-center gap-1 px-2">
         {groupLinks.map(({ key, label, icon: Icon }) => {
           const isActive = key === activeGroup;
 
@@ -131,10 +135,14 @@ export function MobileDock({
               aria-expanded={openGroup === key}
               onClick={() => {
                 setProfileOpen(false);
+                const first = navItems.find((item) => item.group === key);
+                if (first) {
+                  onSelect(first.label);
+                }
                 setOpenGroup((value) => (value === key ? null : key));
               }}
               className={cn(
-                "relative flex min-w-0 flex-1 flex-col items-center gap-0.5 px-1 py-1.5 text-[9px] font-medium transition-colors",
+                "relative flex min-w-0 flex-1 flex-col items-center gap-0.5 px-1 py-1 text-[9px] font-medium transition-colors duration-300 ease-out",
                 isActive
                   ? "rounded-[28px] bg-white/[0.12] text-white"
                   : "rounded-2xl text-white/70 hover:text-white",

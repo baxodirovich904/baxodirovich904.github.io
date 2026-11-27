@@ -5,6 +5,7 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 import { useLanguage } from "@/lib/i18n/provider";
+import { LoadingLabel } from "@/components/loading-label";
 
 type LoadState = "loading" | "ready" | "error";
 
@@ -430,8 +431,14 @@ export function BusScene() {
 
       {state !== "ready" && (
         <div className="pointer-events-none absolute inset-0 z-20 grid place-items-center">
-          <span className="text-[10px] font-medium uppercase tracking-[0.24em] text-slate-600">
-            {state === "error" ? t.hero.busError : t.common.loading}
+          <span>
+            {state === "error" ? (
+              <span className="text-[10px] font-medium uppercase tracking-[0.24em] text-slate-600">
+                {t.hero.busError}
+              </span>
+            ) : (
+              <LoadingLabel />
+            )}
           </span>
         </div>
       )}

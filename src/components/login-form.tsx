@@ -44,6 +44,11 @@ export function LoginForm() {
     setLoading(true);
     window.setTimeout(() => {
       saveSession(session, rememberMe);
+      try {
+        window.sessionStorage.setItem("bm-intro", "1");
+      } catch {
+        // Storage can be unavailable; the dashboard simply skips the intro.
+      }
       router.push("/dashboard");
     }, 650);
   };

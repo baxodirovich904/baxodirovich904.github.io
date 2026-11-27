@@ -238,7 +238,7 @@ export function ProfileCard({
         aria-label="Menyuni ochish"
         style={{ backgroundColor: tint }}
         className={cn(
-          "absolute bottom-0 left-1/2 grid size-14 -translate-x-1/2 place-items-center rounded-[28px] font-display text-sm font-extrabold text-night-950 shadow-[0_12px_30px_-12px_rgba(0,0,0,0.9)] transition-all duration-300 ease-out",
+          "absolute bottom-1.5 left-1/2 grid size-11 -translate-x-1/2 place-items-center rounded-[22px] font-display text-xs font-extrabold text-night-950 shadow-[0_12px_30px_-12px_rgba(0,0,0,0.9)] transition-all duration-300 ease-out",
           collapsed
             ? "scale-100 opacity-100"
             : "pointer-events-none scale-50 opacity-0",

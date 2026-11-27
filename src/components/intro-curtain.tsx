@@ -9,7 +9,7 @@ const REVEAL_MS = 720;
 
 type Phase = "loading" | "reveal" | "done";
 
-export function IntroCurtain() {
+export function IntroCurtain({ durationMs }: { durationMs?: number }) {
   const { t } = useLanguage();
   const words = t.common.loadingSteps;
   const [phase, setPhase] = useState<Phase>("loading");
@@ -18,7 +18,7 @@ export function IntroCurtain() {
     if (phase === "loading") {
       const timer = window.setTimeout(
         () => setPhase("reveal"),
-        words.length * WORD_MS,
+        durationMs ?? words.length * WORD_MS,
       );
       return () => window.clearTimeout(timer);
     }
@@ -29,7 +29,7 @@ export function IntroCurtain() {
     }
 
     return undefined;
-  }, [phase, words.length]);
+  }, [durationMs, phase, words.length]);
 
   if (phase === "done") {
     return null;
