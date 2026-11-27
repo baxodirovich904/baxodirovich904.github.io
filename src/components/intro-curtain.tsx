@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useLanguage } from "@/lib/i18n/provider";
 import { cn } from "@/lib/cn";
 
-const WORD_MS = 1500;
+const WORD_MS = 1200;
 const REVEAL_MS = 720;
 
 type Phase = "loading" | "reveal" | "done";

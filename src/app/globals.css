@@ -43,7 +43,7 @@
   background-image: url("/images/fon-desktop.jpg");
   background-size: cover;
   background-position: 50% 50%;
-  animation: fon-in 1600ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: fon-in 3000ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 @media (max-width: 1023px) {
@@ -344,45 +344,23 @@
 
 /* Intro curtain: blurred site background + rotating status words */
 
-/* One word owns the first quarter of the cycle (1500ms of 6000ms).
-   Positive animation-delay moves each word into its own quarter. */
+/* One word owns the first quarter of the cycle (1200ms of 4800ms).
+   Positive animation-delay moves each word into its own quarter.
+   Only a soft fade in/out remains: no blur or brightness pulses. */
 
 @keyframes intro-cycle {
   0% {
     opacity: 0;
-    filter: blur(8px);
-    transform: scale(1.012);
   }
-  3.3% {
+  5% {
     opacity: 1;
-    filter: blur(0);
-    transform: scale(1);
   }
-  6.7% {
+  16.7% {
     opacity: 1;
-    filter: blur(0);
-    transform: scale(1);
-  }
-  14.2% {
-    opacity: 0.42;
-    filter: blur(2.4px);
-    transform: scale(1.005);
-  }
-  19.2% {
-    opacity: 0.7;
-    filter: blur(0.9px);
-    transform: scale(1.002);
-  }
-  21.7% {
-    opacity: 0;
-    filter: blur(1.6px);
-    transform: scale(1);
   }
   25%,
   100% {
     opacity: 0;
-    filter: blur(1.6px);
-    transform: scale(1);
   }
 }
 
@@ -413,9 +391,9 @@
 
 .intro-word {
   opacity: 0;
-  animation: intro-cycle 6000ms linear both;
+  animation: intro-cycle 4800ms linear both;
   text-shadow: 0 1px 14px rgba(0, 0, 0, 0.45);
-  will-change: opacity, filter;
+  will-change: opacity;
 }
 
 /* A light band travels left to right over the letters. */
@@ -445,7 +423,7 @@
   background-repeat: no-repeat;
   -webkit-background-clip: text;
   background-clip: text;
-  animation: intro-shimmer 1500ms linear infinite;
+  animation: intro-shimmer 1200ms linear infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
