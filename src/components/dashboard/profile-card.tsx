@@ -149,7 +149,7 @@ export function ProfileCard({
     <div className="relative h-full w-full">
       <div
         className={cn(
-          "group absolute inset-x-0 bottom-0 aspect-[1.8] overflow-hidden rounded-[24px] border border-white/10 bg-night-800/70 shadow-[0_18px_50px_-24px_rgba(0,0,0,0.9)] backdrop-blur-sm transition-all duration-300 ease-out",
+          "group absolute inset-x-0 bottom-0 aspect-[1.8] overflow-hidden rounded-[24px] bg-night-800/70 shadow-[0_18px_50px_-24px_rgba(0,0,0,0.9)] backdrop-blur-sm transition-all duration-300 ease-out",
           collapsed
             ? "pointer-events-none scale-90 opacity-0"
             : "scale-100 opacity-100",
@@ -236,7 +236,7 @@ export function ProfileCard({
         aria-label="Chiqish"
         style={{ backgroundColor: tint }}
         className={cn(
-          "absolute bottom-0 left-1/2 grid size-12 -translate-x-1/2 place-items-center rounded-full border border-white/25 font-display text-xs font-extrabold text-night-950 shadow-[0_12px_30px_-12px_rgba(0,0,0,0.9)] transition-all duration-300 ease-out",
+          "absolute bottom-0 left-1/2 grid size-12 -translate-x-1/2 place-items-center rounded-full font-display text-xs font-extrabold text-night-950 shadow-[0_12px_30px_-12px_rgba(0,0,0,0.9)] transition-all duration-300 ease-out",
           collapsed
             ? "scale-100 opacity-100"
             : "pointer-events-none scale-50 opacity-0",

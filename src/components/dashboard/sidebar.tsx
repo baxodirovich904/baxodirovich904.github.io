@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import {
   Bell,
   Building2,
@@ -27,11 +26,10 @@ type NavItem = {
   label: string;
   icon: LucideIcon;
   group: string;
-  active?: boolean;
 };
 
 const navItems: NavItem[] = [
-  { label: "Bosh sahifa", icon: Home, group: "ASOSIY", active: true },
+  { label: "Bosh sahifa", icon: Home, group: "ASOSIY" },
   { label: "Hisobot shakillantirish", icon: FileBarChart, group: "ASOSIY" },
   { label: "Tushum tahlili", icon: TrendingUp, group: "TAHLIL" },
   { label: "Kilometr tahlili", icon: Gauge, group: "TAHLIL" },
@@ -50,35 +48,34 @@ const groups = ["ASOSIY", "TAHLIL", "JADVAL", "TIZIM"];
 
 export function Sidebar({
   open,
+  collapsed,
+  onToggle,
+  activeSection,
+  onSelect,
   session,
   onClose,
   onLogout,
-  onSoon,
 }: {
   open: boolean;
+  collapsed: boolean;
+  onToggle: () => void;
+  activeSection: string;
+  onSelect: (label: string) => void;
   session: Session;
   onClose: () => void;
   onLogout: () => void;
-  onSoon: () => void;
 }) {
-  const [collapsed, setCollapsed] = useState(false);
-
   const visibleGroups = groups.map((group) => ({
     group,
     items: navItems.filter((item) => item.group === group),
   }));
 
-  const toggle = () => {
-    setCollapsed((value) => !value);
-    onClose();
-  };
-
   return (
     <aside
       className={cn(
-        "fixed bottom-2 left-2 top-2 z-50 flex flex-col overflow-hidden border border-white/15 bg-white/[0.09] shadow-[0_40px_120px_-40px_rgba(0,0,0,0.95)] backdrop-blur-2xl transition-[width,border-radius,transform] duration-300 ease-out",
+        "fixed bottom-2 left-2 top-2 z-50 flex flex-col overflow-hidden rounded-[28px] bg-white/[0.09] shadow-[0_40px_120px_-40px_rgba(0,0,0,0.95)] backdrop-blur-2xl transition-[width,transform] duration-500 ease-out",
         "sm:bottom-4 sm:left-4 sm:top-4",
-        collapsed ? "w-[84px] rounded-[42px]" : "w-[288px] rounded-[28px]",
+        collapsed ? "w-[84px]" : "w-[288px]",
         open ? "translate-x-0" : "-translate-x-full",
         "lg:translate-x-0",
       )}
@@ -96,9 +93,9 @@ export function Sidebar({
         </p>
         <button
           type="button"
-          onClick={toggle}
+          onClick={onToggle}
           aria-label={collapsed ? "Menyuni ochish" : "Menyuni yopish"}
-          className="grid size-8 shrink-0 place-items-center rounded-full border border-white/15 bg-white/15 text-white transition hover:bg-white/25"
+          className="grid size-8 shrink-0 place-items-center rounded-full bg-white/10 text-white transition hover:bg-white/20"
         >
           {collapsed ? (
             <ChevronRight className="size-4" />
@@ -122,23 +119,28 @@ export function Sidebar({
             <div className="space-y-0.5">
               {items.map((item) => {
                 const Icon = item.icon;
+                const isActive = item.label === activeSection;
+
                 return (
                   <button
                     key={item.label}
                     type="button"
-                    aria-current={item.active ? "page" : undefined}
-                    onClick={item.active ? onClose : onSoon}
+                    aria-current={isActive ? "page" : undefined}
+                    onClick={() => {
+                      onSelect(item.label);
+                      onClose();
+                    }}
                     className={cn(
                       "flex h-9 w-full items-center gap-3 rounded-2xl px-3 text-xs font-medium transition-colors",
-                      item.active
-                        ? "bg-white text-night-950 shadow-[0_10px_30px_-12px_rgba(0,0,0,0.8)]"
-                        : "text-white/75 hover:bg-white/10 hover:text-white",
+                      isActive
+                        ? "bg-white/[0.12] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.14)]"
+                        : "text-white/75 hover:bg-white/[0.07] hover:text-white",
                     )}
                   >
                     <Icon
                       className={cn(
                         "size-[18px] shrink-0",
-                        item.active ? "text-night-950" : "text-white/70",
+                        isActive ? "text-white" : "text-white/70",
                       )}
                     />
                     <span

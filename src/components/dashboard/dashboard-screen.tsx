@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Sidebar } from "@/components/dashboard/sidebar";
+import { MainPanel } from "@/components/dashboard/main-panel";
 import {
   clearSession,
   readSession,
@@ -12,6 +13,8 @@ import {
 export function DashboardScreen() {
   const router = useRouter();
   const [session, setSession] = useState<Session | null>(null);
+  const [collapsed, setCollapsed] = useState(false);
+  const [section, setSection] = useState("Bosh sahifa");
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
@@ -42,13 +45,18 @@ export function DashboardScreen() {
       <Sidebar
         open
         session={session}
+        collapsed={collapsed}
+        onToggle={() => setCollapsed((value) => !value)}
+        activeSection={section}
+        onSelect={setSection}
         onClose={() => {}}
         onLogout={() => {
           clearSession();
           router.push("/");
         }}
-        onSoon={() => {}}
       />
+
+      <MainPanel collapsed={collapsed} />
     </>
   );
 }
