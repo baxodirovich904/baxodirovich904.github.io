@@ -5,7 +5,6 @@ import { LanguageSwitcher } from "@/components/language-switcher";
 import { LoginForm } from "@/components/login-form";
 import { BusScene } from "@/components/bus-scene";
 import { IntroCurtain } from "@/components/intro-curtain";
-import { HoverWords } from "@/components/hover-words";
 import { useLanguage } from "@/lib/i18n/provider";
 
 export function LoginScreen() {
@@ -32,19 +31,18 @@ export function LoginScreen() {
               className="animate-fade-up mt-0 max-w-[620px] font-display text-[26px] font-extrabold leading-[1.08] tracking-tight text-white sm:mt-5 sm:text-[38px] xl:text-[46px]"
               style={{ animationDelay: "150ms" }}
             >
-              <HoverWords text={t.hero.title1} />
+              {t.hero.title1}
               <br />
-              <HoverWords
-                text={t.hero.title2}
-                wordClassName="bg-gradient-to-r from-brand-300 via-accent-400 to-brand-300 bg-clip-text text-transparent"
-              />
+              <span className="bg-gradient-to-r from-brand-300 via-accent-400 to-brand-300 bg-clip-text text-transparent">
+                {t.hero.title2}
+              </span>
             </h1>
 
             <p
               className="animate-fade-up mt-3 block max-w-lg text-[11px] leading-snug text-slate-400 sm:mt-6 sm:text-[15px] sm:leading-relaxed"
               style={{ animationDelay: "220ms" }}
             >
-              <HoverWords text={t.hero.subtitle} />
+              {t.hero.subtitle}
             </p>
 
           </div>
