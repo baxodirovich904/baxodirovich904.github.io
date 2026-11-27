@@ -68,7 +68,7 @@ export function LoginScreen() {
         </section>
       </div>
 
-      <IntroCurtain duration={1700} />
+      <IntroCurtain />
     </main>
   );
 }

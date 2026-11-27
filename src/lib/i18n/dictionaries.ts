@@ -9,6 +9,12 @@ export const uz = {
     demoData: "Demo ma'lumotlar",
     live: "Jonli",
     loading: "Yuklanmoqda...",
+    loadingSteps: [
+      "Yuklanmoqda...",
+      "Ishlanmoqda...",
+      "Hisoblanmoqda...",
+      "Tayyor...",
+    ],
     close: "Yopish",
     months: [
       "yanvar",
@@ -170,6 +176,7 @@ export const ru: Dictionary = {
     demoData: "Демо-данные",
     live: "Онлайн",
     loading: "Загрузка...",
+    loadingSteps: ["Загрузка...", "Обработка...", "Вычисление...", "Готово..."],
     close: "Закрыть",
     months: [
       "января",
@@ -329,6 +336,7 @@ export const en: Dictionary = {
     demoData: "Demo data",
     live: "Live",
     loading: "Loading...",
+    loadingSteps: ["Loading...", "Processing...", "Computing...", "Ready..."],
     close: "Close",
     months: [
       "January",
@@ -488,6 +496,12 @@ export const kaa: Dictionary = {
     demoData: "Demo maǵlıwmatlar",
     live: "Jonlı",
     loading: "Júklenbekte...",
+    loadingSteps: [
+      "Júklenbekte...",
+      "Islenbekte...",
+      "Esaplanbaqta...",
+      "Tayın...",
+    ],
     close: "Jabıw",
     months: [
       "yanvar",

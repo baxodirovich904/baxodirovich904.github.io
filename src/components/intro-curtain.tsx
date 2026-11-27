@@ -4,25 +4,32 @@ import { useEffect, useState } from "react";
 import { useLanguage } from "@/lib/i18n/provider";
 import { cn } from "@/lib/cn";
 
+const WORD_MS = 1500;
+const REVEAL_MS = 720;
+
 type Phase = "loading" | "reveal" | "done";
 
-export function IntroCurtain({ duration = 1500 }: { duration?: number }) {
+export function IntroCurtain() {
   const { t } = useLanguage();
+  const words = t.common.loadingSteps;
   const [phase, setPhase] = useState<Phase>("loading");
 
   useEffect(() => {
     if (phase === "loading") {
-      const timer = window.setTimeout(() => setPhase("reveal"), duration);
+      const timer = window.setTimeout(
+        () => setPhase("reveal"),
+        words.length * WORD_MS,
+      );
       return () => window.clearTimeout(timer);
     }
 
     if (phase === "reveal") {
-      const timer = window.setTimeout(() => setPhase("done"), 1120);
+      const timer = window.setTimeout(() => setPhase("done"), REVEAL_MS);
       return () => window.clearTimeout(timer);
     }
 
     return undefined;
-  }, [duration, phase]);
+  }, [phase, words.length]);
 
   if (phase === "done") {
     return null;
@@ -37,32 +44,32 @@ export function IntroCurtain({ duration = 1500 }: { duration?: number }) {
       aria-label={t.common.loading}
       className={cn("intro-curtain", revealing && "intro-curtain-reveal")}
     >
-      <div className="intro-halo pointer-events-none absolute size-[420px] rounded-full bg-brand-500/[0.14] blur-[110px]" />
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+        <div className="login-fon absolute inset-0" />
+        <div className="absolute inset-0 bg-black/25 backdrop-blur-[8px]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_16%_14%,rgba(255,255,255,0.08),transparent_55%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_84%_86%,rgba(205,200,192,0.05),transparent_55%)]" />
+      </div>
 
       <div
+        aria-hidden="true"
         className={cn(
-          "intro-content relative flex flex-col items-center px-6 text-center",
+          "intro-content relative grid place-items-center px-6",
           revealing && "scale-95 opacity-0",
         )}
       >
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
-          aria-hidden="true"
-          className="intro-loader-video size-[280px] object-contain sm:size-[320px]"
-        >
-          <source src="/videos/zagruzka-loader.webm" type="video/webm" />
-        </video>
-
-        <p className="mt-1 font-display text-sm font-extrabold uppercase tracking-[0.32em] text-white">
-          Bus Management
-        </p>
-        <p className="mt-2 text-[11px] font-medium uppercase tracking-[0.24em] text-slate-500">
-          {t.common.loading}
-        </p>
+        {words.map((word, index) => (
+          <span
+            key={word}
+            className="intro-word col-start-1 row-start-1 whitespace-nowrap text-[15px] font-medium tracking-[0.03em] text-white sm:text-[17px]"
+            style={{
+              animationDelay: `${index * WORD_MS}ms`,
+              animationDuration: `${words.length * WORD_MS}ms`,
+            }}
+          >
+            {word}
+          </span>
+        ))}
       </div>
     </div>
   );
