@@ -369,23 +369,24 @@
     opacity: 1;
   }
 
+  /* Only the hero texts and the logo. Form, language button and its menu
+     keep their normal size. */
   .login-scope h1,
-  .login-scope h2,
-  .login-scope p,
-  .login-scope label,
-  .login-scope a {
+  .login-scope header p,
+  .login-scope h1 + p {
+    transform-origin: left center;
     transition:
+      transform 300ms cubic-bezier(0.22, 1, 0.36, 1),
       color 260ms ease,
       text-shadow 260ms ease;
   }
 
   .login-scope h1:hover,
-  .login-scope h2:hover,
-  .login-scope p:hover,
-  .login-scope label:hover,
-  .login-scope a:hover {
-    color: rgba(255, 255, 255, 0.94);
-    text-shadow: 0 0 16px rgba(255, 255, 255, 0.24);
+  .login-scope header p:hover,
+  .login-scope h1 + p:hover {
+    transform: scale(1.035);
+    color: rgba(255, 255, 255, 0.96);
+    text-shadow: 0 0 16px rgba(255, 255, 255, 0.22);
   }
 }
 
