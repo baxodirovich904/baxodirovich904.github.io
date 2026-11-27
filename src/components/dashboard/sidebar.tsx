@@ -28,7 +28,7 @@ type NavItem = {
   group: string;
 };
 
-const navItems: NavItem[] = [
+export const navItems: NavItem[] = [
   { label: "Bosh sahifa", icon: Home, group: "ASOSIY" },
   { label: "Hisobot shakillantirish", icon: FileBarChart, group: "ASOSIY" },
   { label: "Tushum tahlili", icon: TrendingUp, group: "TAHLIL" },
@@ -44,7 +44,7 @@ const navItems: NavItem[] = [
   { label: "Bildirishnomalar", icon: Bell, group: "TIZIM" },
 ];
 
-const groups = ["ASOSIY", "TAHLIL", "JADVAL", "TIZIM"];
+export const groups = ["ASOSIY", "TAHLIL", "JADVAL", "TIZIM"];
 
 export function Sidebar({
   open,
@@ -73,9 +73,8 @@ export function Sidebar({
   return (
     <aside
       className={cn(
-        "fixed bottom-2 left-2 top-2 z-50 flex flex-col overflow-hidden rounded-[28px] bg-white/[0.09] shadow-[0_40px_120px_-40px_rgba(0,0,0,0.95)] backdrop-blur-2xl transition-[width,transform] duration-500 ease-out",
-        "sm:bottom-4 sm:left-4 sm:top-4",
-        collapsed ? "w-[84px]" : "w-[288px]",
+        "fixed left-4 z-50 hidden flex-col overflow-hidden rounded-[28px] bg-white/[0.09] shadow-[0_40px_120px_-40px_rgba(0,0,0,0.95)] backdrop-blur-2xl transition-[width,top,bottom,transform] duration-500 ease-out lg:flex",
+        collapsed ? "bottom-6 top-6 w-[64px]" : "bottom-4 top-4 w-[288px]",
         open ? "translate-x-0" : "-translate-x-full",
         "lg:translate-x-0",
       )}
