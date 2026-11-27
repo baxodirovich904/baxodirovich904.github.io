@@ -17,7 +17,7 @@ export function DashboardScreen() {
   const [session, setSession] = useState<Session | null>(null);
   const [collapsed, setCollapsed] = useState(false);
   const [section, setSection] = useState("Bosh sahifa");
-  const [mobileExpanded, setMobileExpanded] = useState(false);
+  const [dockHeight, setDockHeight] = useState(68);
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
@@ -34,8 +34,8 @@ export function DashboardScreen() {
     return () => window.cancelAnimationFrame(frame);
   }, [router]);
 
-  const handleMobileExpanded = useCallback((value: boolean) => {
-    setMobileExpanded(value);
+  const handleDockHeight = useCallback((height: number) => {
+    setDockHeight(height);
   }, []);
 
   if (!session) {
@@ -65,13 +65,13 @@ export function DashboardScreen() {
 
       <MainPanel collapsed={collapsed} />
 
-      <MobileMainPanel expanded={mobileExpanded} />
+      <MobileMainPanel bottom={dockHeight + 24} />
 
       <MobileDock
         session={session}
         activeSection={section}
         onSelect={setSection}
-        onExpandedChange={handleMobileExpanded}
+        onHeightChange={handleDockHeight}
         onLogout={() => {
           clearSession();
           router.push("/");

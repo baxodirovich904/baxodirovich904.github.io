@@ -1,5 +1,6 @@
 "use client";
 
+import { useLayoutEffect, useRef, useState } from "react";
 import {
   Bell,
   Building2,
@@ -70,14 +71,38 @@ export function Sidebar({
     items: navItems.filter((item) => item.group === group),
   }));
 
+  const navRef = useRef<HTMLElement>(null);
+  const itemRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const [pill, setPill] = useState({ top: 0, height: 36 });
+
+  useLayoutEffect(() => {
+    const active = itemRefs.current.find(
+      (node) => node?.getAttribute("aria-current") === "page",
+    );
+
+    if (active) {
+      setPill({ top: active.offsetTop, height: active.offsetHeight });
+    }
+  }, [activeSection, collapsed]);
+
   return (
     <aside
       className={cn(
         "fixed left-4 z-50 hidden flex-col overflow-hidden rounded-[28px] bg-white/[0.09] shadow-[0_40px_120px_-40px_rgba(0,0,0,0.95)] backdrop-blur-2xl transition-[width,top,bottom,transform] duration-500 ease-out lg:flex",
-        collapsed ? "bottom-6 top-6 w-[64px]" : "bottom-4 top-4 w-[288px]",
+        collapsed ? "bottom-6 top-6 w-[56px]" : "bottom-4 top-4 w-[288px]",
         open ? "translate-x-0" : "-translate-x-full",
         "lg:translate-x-0",
       )}
+      style={
+        collapsed
+          ? {
+              WebkitMaskImage:
+                "radial-gradient(circle 28px at 50% calc(100% - 28px), transparent 96%, #000 100%)",
+              maskImage:
+                "radial-gradient(circle 28px at 50% calc(100% - 28px), transparent 96%, #000 100%)",
+            }
+          : undefined
+      }
     >
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/[0.07] via-transparent to-black/25" />
 
@@ -104,7 +129,12 @@ export function Sidebar({
         </button>
       </div>
 
-      <nav className="relative min-h-0 flex-1 overflow-hidden px-3 pb-2 pt-1">
+      <nav ref={navRef} className="relative min-h-0 flex-1 overflow-hidden px-3 pb-2 pt-1">
+        <div
+          aria-hidden="true"
+          className="active-pill pointer-events-none absolute left-3 right-3 z-0 rounded-2xl transition-[top,height] duration-500 ease-out"
+          style={{ top: pill.top, height: pill.height }}
+        />
         {visibleGroups.map(({ group, items }) => (
           <div key={group}>
             <p
@@ -123,6 +153,9 @@ export function Sidebar({
                 return (
                   <button
                     key={item.label}
+                    ref={(node) => {
+                      itemRefs.current[navItems.indexOf(item)] = node;
+                    }}
                     type="button"
                     aria-current={isActive ? "page" : undefined}
                     onClick={() => {
@@ -130,10 +163,10 @@ export function Sidebar({
                       onClose();
                     }}
                     className={cn(
-                      "flex h-9 w-full items-center gap-3 rounded-2xl px-3 text-xs font-medium transition-colors",
+                      "relative z-10 flex h-9 w-full items-center gap-3 rounded-2xl px-3 text-xs font-medium transition-colors",
                       isActive
-                        ? "bg-white/[0.12] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.14)]"
-                        : "text-white/75 hover:bg-white/[0.07] hover:text-white",
+                        ? "text-white"
+                        : "text-white/75 hover:text-white",
                     )}
                   >
                     <Icon
@@ -167,6 +200,7 @@ export function Sidebar({
         <ProfileCard
           session={session}
           onLogout={onLogout}
+          onOpen={onToggle}
           collapsed={collapsed}
         />
       </div>
