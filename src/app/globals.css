@@ -452,12 +452,14 @@
   }
 }
 
-/* Login fits a single viewport. On short phones the 3D scene is hidden
-   instead of allowing the page to scroll. */
+/* On short phones the bus stays visible: it shrinks to fit the viewport
+   instead of being hidden. */
 
 @media (max-width: 1023px) and (max-height: 740px) {
   .login-bus {
-    display: none;
+    min-height: 88px;
+    margin-top: 0.25rem;
+    flex-shrink: 1;
   }
 }
 
