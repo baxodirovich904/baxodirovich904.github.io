@@ -317,7 +317,7 @@ export function BusScene() {
       const verticalFov = THREE.MathUtils.degToRad(camera.fov);
       const verticalTan = Math.tan(verticalFov / 2);
       const horizontalTan = verticalTan * camera.aspect;
-      const margin = 1.2;
+      const margin = 0.92;
 
       let distance = 4;
       const corners = frameCorners.length > 0 ? frameCorners : [new THREE.Vector3(3, 1, 1)];
