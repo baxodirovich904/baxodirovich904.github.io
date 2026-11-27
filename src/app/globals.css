@@ -377,6 +377,9 @@
   display: grid;
   place-items: center;
   overflow: hidden;
+  /* Opaque from the very first paint: hides the login form until the
+     background image has faded in. */
+  background-color: #080808;
 }
 
 .intro-curtain-reveal {
