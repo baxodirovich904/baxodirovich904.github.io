@@ -369,24 +369,16 @@
     opacity: 1;
   }
 
-  /* Only the hero texts and the logo. Form, language button and its menu
-     keep their normal size. */
-  .login-scope h1,
-  .login-scope header p,
-  .login-scope h1 + p {
-    transform-origin: left center;
-    transition:
-      transform 300ms cubic-bezier(0.22, 1, 0.36, 1),
-      color 260ms ease,
-      text-shadow 260ms ease;
+  /* Only words near the pointer grow. Form and language texts are not
+     wrapped in .hover-word, so they keep their normal size. */
+  .hover-word {
+    display: inline-block;
+    transform-origin: center;
+    transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  .login-scope h1:hover,
-  .login-scope header p:hover,
-  .login-scope h1 + p:hover {
+  .hover-word.word-near {
     transform: scale(1.035);
-    color: rgba(255, 255, 255, 0.96);
-    text-shadow: 0 0 16px rgba(255, 255, 255, 0.22);
   }
 }
 
