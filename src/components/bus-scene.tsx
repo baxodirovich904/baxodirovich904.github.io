@@ -75,7 +75,7 @@ export function BusScene() {
     canvas.style.width = "100%";
     canvas.style.height = "100%";
     canvas.style.touchAction = "none";
-    canvas.style.cursor = "grab";
+    canvas.style.cursor = "default";
     canvas.style.opacity = "0";
     canvas.style.transition = "opacity 700ms ease";
     host.appendChild(canvas);
@@ -116,6 +116,7 @@ export function BusScene() {
     let loadedRoot: THREE.Object3D | null = null;
     let baseY = 0.6;
     let frameCorners: THREE.Vector3[] = [];
+    let busSphere: THREE.Sphere | null = null;
     let disposed = false;
     let resize = () => {};
     const maxPitch = 0.28;
@@ -172,6 +173,7 @@ export function BusScene() {
         baseY = scaledSize.y * 0.5 + 0.02;
         pivot.position.y = baseY;
         pivot.add(inner);
+        busSphere = scaledBounds.getBoundingSphere(new THREE.Sphere());
 
         if (gltf.animations.length > 0) {
           mixer = new THREE.AnimationMixer(gltf.scene);
@@ -204,12 +206,42 @@ export function BusScene() {
     let pitch = 0;
     let spin = 0;
     const pointer = new THREE.Vector2();
+    const raycaster = new THREE.Raycaster();
     let frame = 0;
     let elapsed = 0;
     const timer = new THREE.Timer();
     timer.connect(document);
 
+    const updatePointer = (event: PointerEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      pointer.y = -(((event.clientY - rect.top) / rect.height) * 2 - 1);
+    };
+
+    // Only the bus itself reacts to the pointer: raycast against the model.
+    const hitsBus = () => {
+      if (!loadedRoot || !busSphere) {
+        return false;
+      }
+
+      pivot.updateMatrixWorld(true);
+      const worldSphere = busSphere.clone().applyMatrix4(pivot.matrixWorld);
+      raycaster.setFromCamera(pointer, camera);
+
+      if (!raycaster.ray.intersectsSphere(worldSphere)) {
+        return false;
+      }
+
+      return raycaster.intersectObject(loadedRoot, true).length > 0;
+    };
+
     const onPointerDown = (event: PointerEvent) => {
+      updatePointer(event);
+
+      if (!hitsBus()) {
+        return;
+      }
+
       dragging = true;
       spin = 0;
       lastX = event.clientX;
@@ -219,10 +251,7 @@ export function BusScene() {
     };
 
     const onPointerMove = (event: PointerEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-      pointer.y = ((event.clientY - rect.top) / rect.height) * 2 - 1;
-      hovering = true;
+      updatePointer(event);
 
       if (dragging) {
         const deltaX = event.clientX - lastX;
@@ -233,7 +262,11 @@ export function BusScene() {
         spin = deltaX * 0.0038;
         lastX = event.clientX;
         lastY = event.clientY;
+        return;
       }
+
+      hovering = hitsBus();
+      canvas.style.cursor = hovering ? "grab" : "default";
     };
 
     const endDrag = (event: PointerEvent) => {
@@ -242,7 +275,9 @@ export function BusScene() {
       }
 
       dragging = false;
-      canvas.style.cursor = "grab";
+      updatePointer(event);
+      hovering = hitsBus();
+      canvas.style.cursor = hovering ? "grab" : "default";
 
       if (canvas.hasPointerCapture(event.pointerId)) {
         canvas.releasePointerCapture(event.pointerId);
@@ -251,6 +286,9 @@ export function BusScene() {
 
     const onPointerLeave = () => {
       hovering = false;
+      if (!dragging) {
+        canvas.style.cursor = "default";
+      }
     };
 
     const onContextMenu = (event: MouseEvent) => {
@@ -310,8 +348,9 @@ export function BusScene() {
     const observer = new ResizeObserver(resize);
     observer.observe(host);
 
-    // Passenger doors sit on the -X side; this yaw turns that side toward the camera.
-    const baseYaw = 1.2;
+    // Passenger doors sit on the -X side; this yaw shows the same three-quarter
+    // view as the reference render (front on the right, doors facing camera).
+    const baseYaw = 0.85;
 
     const animate = () => {
       timer.update();
