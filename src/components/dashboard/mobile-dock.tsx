@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   CalendarDays,
   Home,
@@ -40,9 +40,6 @@ export function MobileDock({
   const [openGroup, setOpenGroup] = useState<string | null>(null);
   const [profileOpen, setProfileOpen] = useState(false);
   const dockRef = useRef<HTMLDivElement>(null);
-  const rowRef = useRef<HTMLDivElement>(null);
-  const groupRefs = useRef<Array<HTMLButtonElement | null>>([]);
-  const [pill, setPill] = useState({ left: 0, width: 0 });
 
   const expanded = openGroup !== null || profileOpen;
   const activeGroup = navItems.find((item) => item.label === activeSection)?.group;
@@ -69,22 +66,12 @@ export function MobileDock({
     return () => observer.disconnect();
   }, [onHeightChange]);
 
-  useLayoutEffect(() => {
-    const button = groupRefs.current.find(
-      (node) => node?.getAttribute("data-group") === activeGroup,
-    );
-
-    if (button) {
-      setPill({ left: button.offsetLeft, width: button.offsetWidth });
-    }
-  }, [activeGroup]);
-
   return (
     <div
       ref={dockRef}
       className={cn(
-        "fixed inset-x-3 bottom-3 z-50 overflow-hidden rounded-[28px] bg-white/[0.09] shadow-[0_40px_120px_-40px_rgba(0,0,0,0.95)] backdrop-blur-2xl transition-[max-height] duration-500 ease-out lg:hidden",
-        expanded ? "max-h-[640px]" : "max-h-[68px]",
+        "fixed inset-x-3 bottom-3 z-50 overflow-hidden rounded-[28px] bg-white/[0.09] shadow-[0_40px_120px_-40px_rgba(0,0,0,0.95)] backdrop-blur-2xl transition-[max-height] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] lg:hidden",
+        expanded ? "max-h-[520px]" : "max-h-[68px]",
       )}
     >
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/[0.07] via-transparent to-black/25" />
@@ -113,7 +100,9 @@ export function MobileDock({
                     }}
                     className={cn(
                       "flex h-10 w-full items-center gap-3 rounded-2xl px-3 text-xs font-medium transition-colors",
-                      isActive ? "text-white" : "text-white/75 hover:text-white",
+                      isActive
+                        ? "bg-white/[0.12] text-white"
+                        : "text-white/75 hover:text-white",
                     )}
                   >
                     <Icon className="size-4 shrink-0" />
@@ -126,40 +115,36 @@ export function MobileDock({
       )}
 
       {profileOpen && (
-        <div className="relative h-[210px] px-3 pt-3">
+        <div className="relative mx-3 mt-3 aspect-[1.8]">
           <ProfileCard session={session} onLogout={onLogout} />
         </div>
       )}
 
-      <div ref={rowRef} className="relative flex h-[68px] items-center gap-1 px-2">
-        <div
-          aria-hidden="true"
-          className="active-pill pointer-events-none absolute top-2 h-[52px] rounded-2xl transition-[left,width] duration-500 ease-out"
-          style={{ left: pill.left, width: pill.width }}
-        />
+      <div className="relative flex h-[68px] items-center gap-1 px-2">
+        {groupLinks.map(({ key, label, icon: Icon }) => {
+          const isActive = key === activeGroup;
 
-        {groupLinks.map(({ key, label, icon: Icon }, index) => (
-          <button
-            key={key}
-            ref={(node) => {
-              groupRefs.current[index] = node;
-            }}
-            data-group={key}
-            type="button"
-            aria-expanded={openGroup === key}
-            onClick={() => {
-              setProfileOpen(false);
-              setOpenGroup((value) => (value === key ? null : key));
-            }}
-            className={cn(
-              "relative z-10 flex min-w-0 flex-1 flex-col items-center gap-0.5 rounded-2xl px-1 py-1.5 text-[9px] font-medium transition-colors",
-              openGroup === key ? "text-white" : "text-white/70 hover:text-white",
-            )}
-          >
-            <Icon className="size-4 shrink-0" />
-            <span className="w-full truncate text-center">{label}</span>
-          </button>
-        ))}
+          return (
+            <button
+              key={key}
+              type="button"
+              aria-expanded={openGroup === key}
+              onClick={() => {
+                setProfileOpen(false);
+                setOpenGroup((value) => (value === key ? null : key));
+              }}
+              className={cn(
+                "relative flex min-w-0 flex-1 flex-col items-center gap-0.5 px-1 py-1.5 text-[9px] font-medium transition-colors",
+                isActive
+                  ? "rounded-[28px] bg-white/[0.12] text-white"
+                  : "rounded-2xl text-white/70 hover:text-white",
+              )}
+            >
+              <Icon className="size-4 shrink-0" />
+              <span className="w-full truncate text-center">{label}</span>
+            </button>
+          );
+        })}
 
         <button
           type="button"
@@ -169,7 +154,7 @@ export function MobileDock({
             setOpenGroup(null);
             setProfileOpen((value) => !value);
           }}
-          className="relative z-10 grid size-12 shrink-0 place-items-center rounded-[24px] bg-white/15 font-display text-xs font-extrabold text-white shadow-[0_10px_30px_-14px_rgba(0,0,0,0.9)] transition hover:bg-white/25"
+          className="grid size-12 shrink-0 place-items-center rounded-[24px] bg-white/15 font-display text-xs font-extrabold text-white shadow-[0_10px_30px_-14px_rgba(0,0,0,0.9)] transition hover:bg-white/25"
         >
           {initials}
         </button>

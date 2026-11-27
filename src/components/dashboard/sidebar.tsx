@@ -1,6 +1,5 @@
 "use client";
 
-import { useLayoutEffect, useRef, useState } from "react";
 import {
   Bell,
   Building2,
@@ -71,20 +70,6 @@ export function Sidebar({
     items: navItems.filter((item) => item.group === group),
   }));
 
-  const navRef = useRef<HTMLElement>(null);
-  const itemRefs = useRef<Array<HTMLButtonElement | null>>([]);
-  const [pill, setPill] = useState({ top: 0, height: 36 });
-
-  useLayoutEffect(() => {
-    const active = itemRefs.current.find(
-      (node) => node?.getAttribute("aria-current") === "page",
-    );
-
-    if (active) {
-      setPill({ top: active.offsetTop, height: active.offsetHeight });
-    }
-  }, [activeSection, collapsed]);
-
   return (
     <aside
       className={cn(
@@ -93,24 +78,19 @@ export function Sidebar({
         open ? "translate-x-0" : "-translate-x-full",
         "lg:translate-x-0",
       )}
-      style={
-        collapsed
-          ? {
-              WebkitMaskImage:
-                "radial-gradient(circle 28px at 50% calc(100% - 28px), transparent 96%, #000 100%)",
-              maskImage:
-                "radial-gradient(circle 28px at 50% calc(100% - 28px), transparent 96%, #000 100%)",
-            }
-          : undefined
-      }
     >
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/[0.07] via-transparent to-black/25" />
 
-      <div className="relative flex h-[72px] shrink-0 items-center gap-2 px-4">
+      <div
+        className={cn(
+          "relative flex h-[72px] shrink-0 items-center gap-2 transition-all duration-300",
+          collapsed ? "justify-center px-0" : "px-4",
+        )}
+      >
         <p
           className={cn(
             "min-w-0 flex-1 truncate text-[15px] font-bold tracking-tight text-white transition-opacity duration-300",
-            collapsed && "pointer-events-none opacity-0",
+            collapsed && "hidden",
           )}
         >
           Bus Management
@@ -119,7 +99,10 @@ export function Sidebar({
           type="button"
           onClick={onToggle}
           aria-label={collapsed ? "Menyuni ochish" : "Menyuni yopish"}
-          className="grid size-8 shrink-0 place-items-center rounded-full bg-white/10 text-white transition hover:bg-white/20"
+          className={cn(
+            "grid size-8 shrink-0 place-items-center rounded-full bg-white/10 text-white transition hover:bg-white/20",
+            collapsed && "size-10",
+          )}
         >
           {collapsed ? (
             <ChevronRight className="size-4" />
@@ -129,23 +112,18 @@ export function Sidebar({
         </button>
       </div>
 
-      <nav ref={navRef} className="relative min-h-0 flex-1 overflow-hidden px-3 pb-2 pt-1">
-        <div
-          aria-hidden="true"
-          className="active-pill pointer-events-none absolute left-3 right-3 z-0 rounded-2xl transition-[top,height] duration-500 ease-out"
-          style={{ top: pill.top, height: pill.height }}
-        />
+      <nav className="relative min-h-0 flex-1 overflow-hidden px-3 pb-2 pt-1">
         {visibleGroups.map(({ group, items }) => (
           <div key={group}>
             <p
               className={cn(
                 "mb-1 mt-1 px-3 text-[9px] font-semibold uppercase tracking-[0.2em] text-white/45 transition-opacity duration-300",
-                collapsed && "pointer-events-none opacity-0",
+                collapsed && "hidden",
               )}
             >
               {group}
             </p>
-            <div className="space-y-0.5">
+            <div className={cn("space-y-0.5", collapsed && "flex flex-col items-center gap-1 space-y-0")}>
               {items.map((item) => {
                 const Icon = item.icon;
                 const isActive = item.label === activeSection;
@@ -153,9 +131,6 @@ export function Sidebar({
                 return (
                   <button
                     key={item.label}
-                    ref={(node) => {
-                      itemRefs.current[navItems.indexOf(item)] = node;
-                    }}
                     type="button"
                     aria-current={isActive ? "page" : undefined}
                     onClick={() => {
@@ -163,10 +138,20 @@ export function Sidebar({
                       onClose();
                     }}
                     className={cn(
-                      "relative z-10 flex h-9 w-full items-center gap-3 rounded-2xl px-3 text-xs font-medium transition-colors",
-                      isActive
-                        ? "text-white"
-                        : "text-white/75 hover:text-white",
+                      "relative flex items-center gap-3 text-xs font-medium transition-colors",
+                      collapsed
+                        ? cn(
+                            "size-11 justify-center rounded-full px-0",
+                            isActive
+                              ? "bg-white/[0.12] text-white"
+                              : "text-white/75 hover:text-white",
+                          )
+                        : cn(
+                            "h-9 w-full rounded-2xl px-3",
+                            isActive
+                              ? "bg-white/[0.12] text-white"
+                              : "text-white/75 hover:text-white",
+                          ),
                     )}
                   >
                     <Icon
@@ -175,12 +160,7 @@ export function Sidebar({
                         isActive ? "text-white" : "text-white/70",
                       )}
                     />
-                    <span
-                      className={cn(
-                        "truncate transition-opacity duration-300",
-                        collapsed && "pointer-events-none opacity-0",
-                      )}
-                    >
+                    <span className={cn("truncate", collapsed && "hidden")}>
                       {item.label}
                     </span>
                   </button>

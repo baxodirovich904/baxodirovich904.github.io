@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
 import "./globals.css";
 import { LanguageProvider } from "@/lib/i18n/provider";
-import { ViewModeShell } from "@/components/view-mode-shell";
 
 const manrope = Manrope({
   variable: "--font-manrope",
@@ -23,9 +22,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="uz" className={`${manrope.variable} h-full`}>
       <body className="min-h-full bg-night-950 font-sans text-slate-200 antialiased">
-        <LanguageProvider>
-          <ViewModeShell>{children}</ViewModeShell>
-        </LanguageProvider>
+        <LanguageProvider>{children}</LanguageProvider>
       </body>
     </html>
   );

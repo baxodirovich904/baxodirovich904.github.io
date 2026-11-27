@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState, type ChangeEvent } from "react";
-import { createPortal } from "react-dom";
 import { Camera, RotateCcw } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/provider";
 import type { Session } from "@/lib/auth";
@@ -23,7 +22,6 @@ export function ProfileCard({
 }) {
   const { t } = useLanguage();
   const [image, setImage] = useState(DEFAULT_IMAGE);
-  const [mounted, setMounted] = useState(false);
   const [glow, setGlow] = useState("rgba(214, 214, 214, 0.72)");
   const [tint, setTint] = useState("rgb(177, 177, 175)");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -35,11 +33,6 @@ export function ProfileCard({
     .map((part) => part[0])
     .join("")
     .toUpperCase();
-
-  useEffect(() => {
-    const frame = window.requestAnimationFrame(() => setMounted(true));
-    return () => window.cancelAnimationFrame(frame);
-  }, []);
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
@@ -238,21 +231,21 @@ export function ProfileCard({
       />
       </div>
 
-      {collapsed &&
-        mounted &&
-        createPortal(
-          <button
-            type="button"
-            onClick={onOpen}
-            title="Menyuni ochish"
-            aria-label="Menyuni ochish"
-            style={{ backgroundColor: tint }}
-            className="profile-droplet fixed bottom-6 left-4 z-[60] grid size-14 place-items-center rounded-[28px] font-display text-sm font-extrabold text-night-950 shadow-[0_12px_30px_-12px_rgba(0,0,0,0.9)] transition hover:brightness-110"
-          >
-            {initials}
-          </button>,
-          document.body,
+      <button
+        type="button"
+        onClick={onOpen}
+        title="Menyuni ochish"
+        aria-label="Menyuni ochish"
+        style={{ backgroundColor: tint }}
+        className={cn(
+          "absolute bottom-0 left-1/2 grid size-14 -translate-x-1/2 place-items-center rounded-[28px] font-display text-sm font-extrabold text-night-950 shadow-[0_12px_30px_-12px_rgba(0,0,0,0.9)] transition-all duration-300 ease-out",
+          collapsed
+            ? "scale-100 opacity-100"
+            : "pointer-events-none scale-50 opacity-0",
         )}
+      >
+        {initials}
+      </button>
     </div>
   );
 }
