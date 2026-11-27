@@ -67,7 +67,7 @@ export function IntroCurtain() {
               animationDuration: `${words.length * WORD_MS}ms`,
             }}
           >
-            {word}
+            <span className="intro-word-shine">{word}</span>
           </span>
         ))}
       </div>
