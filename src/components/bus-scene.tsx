@@ -310,7 +310,8 @@ export function BusScene() {
     const observer = new ResizeObserver(resize);
     observer.observe(host);
 
-    const baseYaw = -0.68;
+    // Passenger doors sit on the -X side; this yaw turns that side toward the camera.
+    const baseYaw = 1.2;
 
     const animate = () => {
       timer.update();
